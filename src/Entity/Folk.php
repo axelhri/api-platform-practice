@@ -5,10 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Entity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ApiResource]
 #[Entity]
-class Folk {
+class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]
@@ -59,4 +61,10 @@ class Folk {
     {
         $this->password = $password;
     }
+
+    public function getRoles(): array { return ['ROLE_USER']; }
+
+    public function eraseCredentials(): void{}
+
+    public function getUserIdentifier(): string { return $this->email; }
 }
