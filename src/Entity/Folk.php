@@ -12,13 +12,11 @@ class Folk {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]
-    private ?int $id;
+    private ?int $id = null;
     #[ORM\Column(type: 'string' ,length: 30, unique: true)]
     private ?string $username = null;
-
     #[ORM\Column(type: 'string' ,length: 255, unique: true)]
     private ?string $email = null;
-
     #[ORM\Column(type: 'string' ,length: 255)]
     private ?string $password = null;
 
