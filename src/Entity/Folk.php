@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Repository\FolkRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[ORM\Entity(repositoryClass: FolkRepository::class)]
 #[ApiResource]
-#[Entity]
 class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
