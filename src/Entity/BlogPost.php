@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ApiResource]
-#[Entity]
+#[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 class BlogPost {
     #[ORM\Id]

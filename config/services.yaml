@@ -22,3 +22,9 @@ services:
     App\Middlewares\AuthSuccessListener:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccess }
+
+    App\DataPersister\BlogPostDataPersister:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $security: '@security.helper'
+            $processor: '@App\DataPersister\BlogPostDataPersister.inner'
