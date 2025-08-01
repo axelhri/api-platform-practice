@@ -9,7 +9,7 @@ use App\Repository\FolkRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class BlogPostDataPersister implements ProcessorInterface {
-    public function __construct(private Security $security, private ProcessorInterface $processor, private FolkRepository $folkRepository)
+    public function __construct(private Security $security, private ProcessorInterface $processor)
     {
     }
 
