@@ -28,3 +28,8 @@ services:
         arguments:
             $security: '@security.helper'
             $processor: '@App\DataPersister\BlogPostDataPersister.inner'
+
+    App\Middlewares\JWTCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+

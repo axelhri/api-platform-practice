@@ -7,7 +7,7 @@ security:
         folk_provider:
             entity:
                 class: App\Entity\Folk
-                property: username
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
