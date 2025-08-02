@@ -6,8 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ApiResource(
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
         new Get(),
         new GetCollection(),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_REDACTOR')"),
-        new Put(security: "is_granted('ROLE_ADMIN') or object.getAuthor() == user"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or object.getAuthor() == user"),
         new Delete(security: "is_granted('ROLE_ADMIN') or object.getAuthor() == user"),
     ]
 )]

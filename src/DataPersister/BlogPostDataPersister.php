@@ -13,10 +13,21 @@ class BlogPostDataPersister implements ProcessorInterface {
     {
     }
 
+    public function supports(mixed $data, Operation $operation, array $context = []): bool
+    {
+        return $data instanceof BlogPost;
+    }
+
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
+        if (!$this->supports($data, $operation, $context)) {
+            return $this->processor->process($data, $operation, $uriVariables, $context);
+        }
         $user = $this->security->getUser();
-        $data->setAuthor($user);
+        if ($user !== null) {
+            $data->setAuthor($user);
+        }
+
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }
 
