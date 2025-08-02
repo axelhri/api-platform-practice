@@ -22,6 +22,9 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Column(type: 'string' ,length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,7 +65,15 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
         $this->password = $password;
     }
 
-    public function getRoles(): array { return ['ROLE_USER']; }
+    public function getRoles(): array
+    {
+        return array_unique([...$this->roles, 'ROLE_USER']);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
 
     public function eraseCredentials(): void{}
 
