@@ -31,27 +31,23 @@ class BlogPost {
     #[ORM\Column(type: 'string')]
     private string $text;
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeInterface $createdAt = null;
+    private \DateTimeInterface $createdAt;
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
     #[ORM\ManyToOne(targetEntity: Folk::class, inversedBy: 'blogPosts')]
     private Folk $author;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
-
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
