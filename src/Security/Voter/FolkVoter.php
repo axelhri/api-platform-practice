@@ -5,7 +5,6 @@ namespace App\Security\Voter;
 use App\Entity\Folk;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class FolkVoter extends Voter
 {
@@ -21,7 +20,7 @@ final class FolkVoter extends Voter
     {
         $user = $token->getUser();
 
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof Folk) {
             return false;
         }
 
@@ -29,7 +28,7 @@ final class FolkVoter extends Voter
             return true;
         }
 
-        if ($user === $subject) {
+        if ($subject->getUser()->getId() === $user->getId()) {
             return true;
         }
 
