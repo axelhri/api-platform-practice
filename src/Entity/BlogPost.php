@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
         new Get(),
         new GetCollection(),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_REDACTOR')"),
-        new Patch(security: "is_granted('ROLE_ADMIN') or object.getAuthor() == user"),
-        new Delete(security: "is_granted('ROLE_ADMIN') or object.getAuthor() == user"),
+        new Patch(security: "is_granted('BLOGPOST_EDIT', object)"),
+        new Delete(security: "is_granted('BLOGPOST_DELETE', object)"),
     ]
 )]
 #[ORM\Entity]

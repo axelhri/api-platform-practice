@@ -3,6 +3,7 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\BlogPost;
 use App\Repository\FolkRepository;
@@ -23,9 +24,11 @@ class BlogPostDataPersister implements ProcessorInterface {
         if (!$this->supports($data, $operation, $context)) {
             return $this->processor->process($data, $operation, $uriVariables, $context);
         }
-        $user = $this->security->getUser();
-        if ($user !== null) {
-            $data->setAuthor($user);
+        if ($operation instanceof Post) {
+            $user = $this->security->getUser();
+            if ($user !== null) {
+                $data->setAuthor($user);
+            }
         }
 
         return $this->processor->process($data, $operation, $uriVariables, $context);
