@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: FolkRepository::class)]
 #[ApiResource(
-    operations: [
+operations: [
         new Get(),
         new GetCollection(),
         new Patch(security: "is_granted('FOLK_EDIT', object)"),
