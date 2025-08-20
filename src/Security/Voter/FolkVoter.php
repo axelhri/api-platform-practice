@@ -6,6 +6,9 @@ use App\Entity\Folk;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, Folk>
+ */
 final class FolkVoter extends Voter
 {
 
@@ -29,7 +32,7 @@ final class FolkVoter extends Voter
             return true;
         }
 
-        if ($subject->getUser()->getId() === $user->getId()) {
+        if ($subject->getId() === $user->getId()) {
             return true;
         }
 

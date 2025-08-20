@@ -7,6 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
+/**
+ * @extends ServiceEntityRepository<BlogPost>
+ */
 class BlogPostRepository extends ServiceEntityRepository
 {
 
