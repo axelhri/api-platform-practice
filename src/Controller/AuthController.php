@@ -12,18 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class AuthController extends AbstractController {
-
+class AuthController extends AbstractController
+{
     public function __construct(
-		private AuthService $authService,
-		private SerializerInterface $serializer,
-		private CookieService $cookieService
-	) {
-	}
+        private AuthService $authService,
+        private SerializerInterface $serializer,
+        private CookieService $cookieService
+    ) {
+    }
 
     #[Route('/api/register', name: 'register', methods: ['POST'])]
     public function register(Request $request): Response
-	{
+    {
         $user = $this->serializer->deserialize($request->getContent(), Folk::class, 'json');
         $token = $this->authService->register($user);
         $cookie = $this->cookieService->generateCookie($token);
@@ -33,8 +33,8 @@ class AuthController extends AbstractController {
     }
 
     #[Route('api/logout', name: 'logout', methods: ['POST'])]
-	public function logout(): Response
-	{
+    public function logout(): Response
+    {
         $cookie = $this->cookieService->deleteCookie();
         $response = new JsonResponse(["message" => "User logged out successfully"]);
         $response->headers->setCookie($cookie);

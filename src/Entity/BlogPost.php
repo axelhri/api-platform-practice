@@ -21,12 +21,13 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-class BlogPost {
+class BlogPost
+{
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]
     private int $id;
-    #[ORM\Column(type: 'string' ,length: 50)]
+    #[ORM\Column(type: 'string', length: 50)]
     private string $title;
     #[ORM\Column(type: 'string')]
     private string $text;

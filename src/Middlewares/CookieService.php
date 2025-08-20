@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 class CookieService
 {
     public function generateCookie(string $token): Cookie
-	{
+    {
         return Cookie::create('access_token')
             ->withValue($token)
             ->withExpires(new \DateTime('+1 hour'))
@@ -17,7 +17,7 @@ class CookieService
     }
 
     public function deleteCookie(): Cookie
-	{
+    {
         return Cookie::create('access_token')
             ->withValue('')
             ->withExpires(new \DateTime('-1 hour'))

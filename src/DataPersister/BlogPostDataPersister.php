@@ -15,19 +15,18 @@ use Symfony\Bundle\SecurityBundle\Security;
  */
 class BlogPostDataPersister implements ProcessorInterface
 {
-
     public function __construct(
-		/**
-		 * @var ProcessorInterface<BlogPost, BlogPost>
-		 */
-		private ProcessorInterface $processor,
-		private Security $security
-	) {
+        /**
+         * @var ProcessorInterface<BlogPost, BlogPost>
+         */
+        private ProcessorInterface $processor,
+        private Security $security
+    ) {
     }
 
-	/**
-	 * @param array<string, mixed> $context
-	 */
+    /**
+     * @param array<string, mixed> $context
+     */
     public function supports(mixed $data, Operation $operation, array $context = []): bool
     {
         return $data instanceof BlogPost;

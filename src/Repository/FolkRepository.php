@@ -14,14 +14,13 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class FolkRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Folk::class);
     }
 
     public function save(Folk $folk): void
-	{
+    {
         $this->getEntityManager()->persist($folk);
         $this->getEntityManager()->flush();
     }

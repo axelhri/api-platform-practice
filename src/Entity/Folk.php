@@ -14,28 +14,29 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: FolkRepository::class)]
 #[ApiResource(
-operations: [
+    operations: [
         new Get(),
         new GetCollection(),
         new Patch(security: "is_granted('FOLK_EDIT', object)"),
         new Delete(security: "is_granted('FOLK_DELETE', object)"),
     ]
 )]
-class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
+class Folk implements UserInterface, PasswordAuthenticatedUserInterface
+{
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]
     private ?int $id = null;
-    #[ORM\Column(type: 'string' ,length: 30, unique: true)]
+    #[ORM\Column(type: 'string', length: 30, unique: true)]
     private ?string $username = null;
-    #[ORM\Column(type: 'string' ,length: 255, unique: true)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $email = null;
-    #[ORM\Column(type: 'string' ,length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
 
-	/**
-	 * @var string[]
-	 */
+    /**
+     * @var string[]
+     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -84,15 +85,20 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface {
         return array_unique([...$this->roles, 'ROLE_USER']);
     }
 
-	/**
-	 * @param string[] $roles
-	 */
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
     }
 
-    public function eraseCredentials(): void{}
+    public function eraseCredentials(): void
+    {
+    }
 
-    public function getUserIdentifier(): string { return $this->email; }
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
 }
