@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class BlogPostVoter extends Voter
 {
+
     public const EDIT = 'BLOGPOST_EDIT';
     public const DELETE = 'BLOGPOST_DELETE';
 

@@ -9,9 +9,13 @@ use App\Entity\BlogPost;
 use App\Repository\FolkRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class BlogPostDataPersister implements ProcessorInterface {
-    public function __construct(private Security $security, private ProcessorInterface $processor)
-    {
+class BlogPostDataPersister implements ProcessorInterface
+{
+
+    public function __construct(
+		private Security $security,
+		private ProcessorInterface $processor
+	) {
     }
 
     public function supports(mixed $data, Operation $operation, array $context = []): bool

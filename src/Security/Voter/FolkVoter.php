@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class FolkVoter extends Voter
 {
+
     public const EDIT = 'FOLK_EDIT';
     public const DELETE = 'FOLK_DELETE';
 
