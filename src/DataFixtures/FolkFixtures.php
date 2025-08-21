@@ -15,21 +15,25 @@ class FolkFixtures extends Fixture implements FixtureGroupInterface
 	 */
 	public static array $fixtures = [
 		[
+			'username' => 'admin',
 			'email' => 'admin@mail.com',
 			'roles' => [Roles::ROLE_ADMIN],
 			'password' => 'password',
 		],
 		[
+			'username' => 'moderator',
 			'email' => 'moderator@mail.com',
 			'roles' => [Roles::ROLE_MODERATOR],
 			'password' => 'password',
 		],
 		[
+			'username' => 'redactor',
 			'email' => 'redactor@mail.com',
 			'roles' => [Roles::ROLE_REDACTOR],
 			'password' => 'password',
 		],
 		[
+			'username' => 'user',
 			'email' => 'user@mail.com',
 			'roles' => [Roles::ROLE_USER],
 			'password' => 'password',

@@ -9,18 +9,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AuthService
 {
-    public function __construct(
-        private FolkRepository $folkRepository,
-        private UserPasswordHasherInterface $passwordHasher,
-        private JWTTokenManagerInterface $jwtTokenManager
-    ) {
-    }
+	public function __construct(
+		private FolkRepository $folkRepository,
+		private UserPasswordHasherInterface $passwordHasher,
+		private JWTTokenManagerInterface $jwtTokenManager
+	) {
+	}
 
-    public function register(Folk $folk): string
-    {
-        $password = $this->passwordHasher->hashPassword($folk, $folk->getPassword());
-        $folk->setPassword($password);
-        $this->folkRepository->save($folk);
-        return $this->jwtTokenManager->create($folk);
-    }
+	public function register(Folk $folk): string
+	{
+		$password = $this->passwordHasher->hashPassword($folk, $folk->getPassword());
+		$folk->setPassword($password);
+		$this->folkRepository->save($folk);
+		return $this->jwtTokenManager->create($folk);
+	}
 }

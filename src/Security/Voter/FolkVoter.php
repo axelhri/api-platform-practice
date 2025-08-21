@@ -11,30 +11,30 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class FolkVoter extends Voter
 {
-    public const EDIT = 'FOLK_EDIT';
-    public const DELETE = 'FOLK_DELETE';
+	public const EDIT = 'FOLK_EDIT';
+	public const DELETE = 'FOLK_DELETE';
 
-    protected function supports(string $attribute, mixed $subject): bool
-    {
-        return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof Folk;
-    }
+	protected function supports(string $attribute, mixed $subject): bool
+	{
+		return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof Folk;
+	}
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
-    {
-        $user = $token->getUser();
+	protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+	{
+		$user = $token->getUser();
 
-        if (!$user instanceof Folk) {
-            return false;
-        }
+		if (!$user instanceof Folk) {
+			return false;
+		}
 
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-            return true;
-        }
+		if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+			return true;
+		}
 
-        if ($subject->getId() === $user->getId()) {
-            return true;
-        }
+		if ($subject->getId() === $user->getId()) {
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 }

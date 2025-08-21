@@ -13,30 +13,30 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class BlogPostVoter extends Voter
 {
-    public const EDIT = 'BLOGPOST_EDIT';
-    public const DELETE = 'BLOGPOST_DELETE';
+	public const EDIT = 'BLOGPOST_EDIT';
+	public const DELETE = 'BLOGPOST_DELETE';
 
-    protected function supports(string $attribute, mixed $subject): bool
-    {
-        return in_array($attribute, [self::EDIT, self::DELETE]) && $subject instanceof BlogPost;
-    }
+	protected function supports(string $attribute, mixed $subject): bool
+	{
+		return in_array($attribute, [self::EDIT, self::DELETE]) && $subject instanceof BlogPost;
+	}
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
-    {
-        $user = $token->getUser();
+	protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+	{
+		$user = $token->getUser();
 
-        if (!$user instanceof Folk) {
-            return false;
-        }
+		if (!$user instanceof Folk) {
+			return false;
+		}
 
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-            return true;
-        }
+		if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+			return true;
+		}
 
-        if ($subject->getAuthor()?->getId() === $user->getId()) {
-            return true;
-        }
+		if ($subject->getAuthor()?->getId() === $user->getId()) {
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 }
