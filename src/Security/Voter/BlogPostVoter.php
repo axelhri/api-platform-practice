@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\BlogPost;
 use App\Entity\Folk;
+use App\Enum\Roles;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,12 +14,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class BlogPostVoter extends Voter
 {
+	public const CREATE = 'BLOGPOST_CREATE';
 	public const EDIT = 'BLOGPOST_EDIT';
 	public const DELETE = 'BLOGPOST_DELETE';
 
 	protected function supports(string $attribute, mixed $subject): bool
 	{
-		return in_array($attribute, [self::EDIT, self::DELETE]) && $subject instanceof BlogPost;
+		return in_array($attribute, [self::CREATE, self::EDIT, self::DELETE]) && $subject instanceof BlogPost;
 	}
 
 	protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -27,6 +29,11 @@ final class BlogPostVoter extends Voter
 
 		if (!$user instanceof Folk) {
 			return false;
+		}
+
+		if ($attribute === self::CREATE) {
+			return in_array(Roles::ROLE_ADMIN, $user->getRoles(), true)
+				|| in_array(Roles::ROLE_REDACTOR, $user->getRoles(), true);
 		}
 
 		if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {

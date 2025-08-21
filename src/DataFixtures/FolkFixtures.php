@@ -54,6 +54,7 @@ class FolkFixtures extends Fixture implements FixtureGroupInterface
 			}
 
 			$manager->persist($folk);
+			$this->addReference('folk_' . $folk->getUsername(), $folk);
 		}
 
 		$manager->flush();
