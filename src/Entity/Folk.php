@@ -7,12 +7,14 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use App\EntityListener\FolkListener;
 use App\Repository\FolkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: FolkRepository::class)]
+#[ORM\EntityListeners([FolkListener::class])]
 #[ApiResource(
 	operations: [
 		new Get(),

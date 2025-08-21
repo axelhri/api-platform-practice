@@ -36,6 +36,7 @@ class BlogPost
 	#[ORM\Column(type: 'datetime', nullable: true)]
 	private ?\DateTimeInterface $updatedAt = null;
 	#[ORM\ManyToOne(targetEntity: Folk::class, inversedBy: 'blogPosts')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
 	private Folk $author;
 
 	#[ORM\PrePersist]
