@@ -22,6 +22,7 @@ readonly class FolkListener
 			$folk->setPassword($this->encoder->hashPassword($folk, $folk->getPassword()));
 		}
 		$folk->setRoles([...$folk->getRoles(), Roles::ROLE_USER]);
+		$folk->setCreatedAt(new \DateTimeImmutable());
 	}
 
 	public function preUpdate(Folk $folk, PreUpdateEventArgs $event): void
@@ -29,5 +30,6 @@ readonly class FolkListener
 		if ($event->hasChangedField('password')) {
 			$folk->setPassword($this->encoder->hashPassword($folk, $folk->getPassword()));
 		}
+		$folk->setUpdatedAt(new \DateTime());
 	}
 }

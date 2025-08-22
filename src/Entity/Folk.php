@@ -26,8 +26,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 	operations: [
 		new Get(),
 		new GetCollection(),
-		new Patch(security: "is_granted('" . FolkVoter::EDIT . "', object"),
-		new Delete(security: "is_granted('" . FolkVoter::DELETE . "', object"),
+		new Patch(security: "is_granted('" . FolkVoter::EDIT . "', object)"),
+		new Delete(security: "is_granted('" . FolkVoter::DELETE . "', object)"),
 	],
 	normalizationContext: ['groups' => [AppGroups::USER_READ]],
 	denormalizationContext: ['groups' => [AppGroups::USER_WRITE]]
@@ -110,6 +110,12 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 	)]
 	private array $roles = [];
 
+	#[ORM\Column(type: 'datetime_immutable', nullable: false)]
+	private \DateTimeImmutable $createdAt;
+
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTime $updatedAt = null;
+
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -161,6 +167,26 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 	public function setRoles(array $roles): void
 	{
 		$this->roles = array_unique($roles);
+	}
+
+	public function getCreatedAt(): ?\DateTimeImmutable
+	{
+		return $this->createdAt;
+	}
+
+	public function setCreatedAt(?\DateTimeImmutable $createdAt): void
+	{
+		$this->createdAt = $createdAt;
+	}
+
+	public function getUpdatedAt(): ?\DateTime
+	{
+		return $this->updatedAt;
+	}
+
+	public function setUpdatedAt(?\DateTime $updatedAt): void
+	{
+		$this->updatedAt = $updatedAt;
 	}
 
 	public function eraseCredentials(): void
