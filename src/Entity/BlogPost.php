@@ -16,6 +16,7 @@ use App\Enum\OaTypes;
 use App\Security\Voter\BlogPostVoter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ApiResource(
 	operations: [
@@ -25,7 +26,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 		new Patch(security: "is_granted('" . BlogPostVoter::EDIT ."', object)"),
 		new Delete(security: "is_granted('" . BlogPostVoter::DELETE ."', object)"),
 	],
-	normalizationContext: ['groups' => [AppGroups::USER_READ]],
+	normalizationContext: [
+		'groups' => [AppGroups::USER_READ],
+		'enable_max_depth' => true,
+	],
 	denormalizationContext: ['groups' => [AppGroups::ADMIN_WRITE, AppGroups::REDACTOR_WRITE]]
 )]
 #[ORM\Entity]
@@ -87,6 +91,7 @@ class BlogPost
 	#[ORM\ManyToOne(targetEntity: Folk::class, inversedBy: 'blogPosts')]
 	#[ORM\JoinColumn(onDelete: 'CASCADE')]
 	#[Groups([AppGroups::USER_READ])]
+	#[MaxDepth(1)]
 	private Folk $author;
 
 	public function getId(): ?int

@@ -15,9 +15,12 @@ use App\Enum\OaTypes;
 use App\Enum\Roles;
 use App\Repository\FolkRepository;
 use App\Security\Voter\FolkVoter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: FolkRepository::class)]
@@ -29,7 +32,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 		new Patch(security: "is_granted('" . FolkVoter::EDIT . "', object)"),
 		new Delete(security: "is_granted('" . FolkVoter::DELETE . "', object)"),
 	],
-	normalizationContext: ['groups' => [AppGroups::USER_READ]],
+	normalizationContext: [
+		'groups' => [AppGroups::USER_READ],
+		'enable_max_depth' => true,
+		],
 	denormalizationContext: ['groups' => [AppGroups::USER_WRITE]]
 )]
 class Folk implements UserInterface, PasswordAuthenticatedUserInterface
@@ -110,11 +116,32 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 	)]
 	private array $roles = [];
 
+	/**
+	 * @var Collection<int, BlogPost>
+	 */
+	#[ORM\OneToMany(mappedBy: 'author', targetEntity: BlogPost::class, cascade: ['persist', 'remove'])]
+	#[Groups([AppGroups::USER_READ])]
+	#[MaxDepth(1)]
+	private Collection $blogPosts;
+
 	#[ORM\Column(type: 'datetime_immutable', nullable: false)]
 	private \DateTimeImmutable $createdAt;
 
 	#[ORM\Column(type: 'datetime', nullable: true)]
 	private ?\DateTime $updatedAt = null;
+
+	public function __construct()
+	{
+		$this->blogPosts = new ArrayCollection();
+	}
+
+	/**
+	 * @return Collection<int, BlogPost>
+	 */
+	public function getBlogPosts(): Collection
+	{
+		return $this->blogPosts;
+	}
 
 	public function getId(): ?int
 	{
