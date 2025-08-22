@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Folk;
+use App\Enum\Roles;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -27,7 +28,7 @@ final class FolkVoter extends Voter
 			return false;
 		}
 
-		if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+		if (in_array(Roles::ROLE_ADMIN, $user->getRoles(), true)) {
 			return true;
 		}
 

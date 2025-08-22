@@ -36,7 +36,7 @@ final class BlogPostVoter extends Voter
 				|| in_array(Roles::ROLE_REDACTOR, $user->getRoles(), true);
 		}
 
-		if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+		if (in_array(Roles::ROLE_ADMIN, $user->getRoles(), true)) {
 			return true;
 		}
 

@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\EntityListener\FolkListener;
+use App\Enum\Roles;
 use App\Repository\FolkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -84,7 +85,7 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function getRoles(): array
 	{
-		return array_unique([...$this->roles, 'ROLE_USER']);
+		return array_unique([...$this->roles, Roles::ROLE_USER]);
 	}
 
 	/**
@@ -92,7 +93,7 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public function setRoles(array $roles): void
 	{
-		$this->roles = $roles;
+		$this->roles = array_unique($roles);
 	}
 
 	public function eraseCredentials(): void
