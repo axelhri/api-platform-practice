@@ -124,10 +124,10 @@ class Folk implements UserInterface, PasswordAuthenticatedUserInterface
 	#[MaxDepth(1)]
 	private Collection $blogPosts;
 
-	#[ORM\Column(type: 'datetime_immutable', nullable: false)]
+	#[ORM\Column(type: OaTypes::DATETIME_IMMUTABLE, nullable: false)]
 	private \DateTimeImmutable $createdAt;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: OaTypes::DATETIME, nullable: true)]
 	private ?\DateTime $updatedAt = null;
 
 	public function __construct()

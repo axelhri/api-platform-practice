@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Attribute\MaxDepth;
 class BlogPost
 {
 	#[ORM\Id]
-	#[ORM\Column(type: "integer")]
+	#[ORM\Column(type: OaTypes::INTEGER)]
 	#[ORM\GeneratedValue]
 	#[Groups([AppGroups::USER_READ])]
 	#[ApiProperty(
@@ -52,7 +52,7 @@ class BlogPost
 	)]
 	private int $id;
 
-	#[ORM\Column(type: 'string', length: 50)]
+	#[ORM\Column(type: OaTypes::STRING, length: 50)]
 	#[Groups([AppGroups::USER_READ, AppGroups::ADMIN_WRITE, AppGroups::REDACTOR_WRITE])]
 	#[ApiProperty(
 		readable: true,
@@ -66,7 +66,7 @@ class BlogPost
 	)]
 	private string $title;
 
-	#[ORM\Column(type: 'string')]
+	#[ORM\Column(type: OaTypes::STRING)]
 	#[Groups([AppGroups::USER_READ, AppGroups::ADMIN_WRITE, AppGroups::REDACTOR_WRITE])]
 	#[ApiProperty(
 		readable: true,
@@ -80,11 +80,11 @@ class BlogPost
 	)]
 	private string $text;
 
-	#[ORM\Column(type: 'datetime_immutable', nullable: false)]
+	#[ORM\Column(type: OaTypes::DATETIME_IMMUTABLE, nullable: false)]
 	#[Groups([AppGroups::USER_READ])]
 	private \DateTimeImmutable $createdAt;
 
-	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[ORM\Column(type: OaTypes::DATETIME, nullable: true)]
 	#[Groups([AppGroups::ADMIN_READ, AppGroups::REDACTOR_READ])]
 	private ?\DateTime $updatedAt = null;
 
