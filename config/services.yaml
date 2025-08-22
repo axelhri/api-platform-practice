@@ -33,3 +33,7 @@ services:
             $security: '@security.helper'
             $processor: '@App\DataPersister\BlogPostDataPersister.inner'
 
+    App\Serializer\AdminContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@App\Serializer\AdminContextBuilder.inner', '@security.authorization_checker' ]
+        autoconfigure: false
