@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[Autoconfigure(tags: ['doctrine.orm.entity_listener'], lazy: true) ]
+#[Autoconfigure(tags: ['doctrine.orm.entity_listener'], lazy: true)]
 readonly class FolkListener
 {
 	public function __construct(

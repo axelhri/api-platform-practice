@@ -32,8 +32,9 @@ final class BlogPostVoter extends Voter
 		}
 
 		if ($attribute === self::CREATE) {
-			return in_array(Roles::ROLE_ADMIN, $user->getRoles(), true)
-				|| in_array(Roles::ROLE_REDACTOR, $user->getRoles(), true);
+			$roles = $user->getRoles();
+			return in_array(Roles::ROLE_ADMIN, $roles, true)
+				|| in_array(Roles::ROLE_REDACTOR, $roles, true);
 		}
 
 		if (in_array(Roles::ROLE_ADMIN, $user->getRoles(), true)) {
