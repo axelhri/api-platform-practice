@@ -15,6 +15,13 @@ class AdminContextBuilder implements SerializerContextBuilderInterface
 		private AuthorizationCheckerInterface $authorizationChecker,
 	) {
 	}
+
+	/**
+	 * @param Request $request
+	 * @param bool $normalization
+	 * @param array<string, mixed>|null $extractedAttributes
+	 * @return array<string, mixed>
+	 */
 	public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
 	{
 		$context = $this->serializerContextBuilder->createFromRequest($request, $normalization, $extractedAttributes);
