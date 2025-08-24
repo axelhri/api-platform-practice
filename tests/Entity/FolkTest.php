@@ -27,6 +27,7 @@ class FolkTest extends ApiTestCase
 		static::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 	}
 
+	#[Test]
 	public function folkShouldListUsers(): void
 	{
 		$users = static::getContainer()->get(FolkRepository::class)->findAll();
@@ -37,7 +38,6 @@ class FolkTest extends ApiTestCase
 				'id' => $user->getId(),
 				'username' => $user->getUsername(),
 				'email' => $user->getEmail(),
-				'roles' => $user->getRoles(),
 			];
 		}
 

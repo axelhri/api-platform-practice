@@ -25,7 +25,7 @@ trait UserProviderTrait
 		/** @var FolkRepository $folkRepository */
 		$folkRepository = static::getContainer()->get(FolkRepository::class);
 
-		return $folkRepository->findOneBy(['roles' => Roles::ROLE_ADMIN]);
+		return $folkRepository->findOneBy(['email' => 'admin@mail.com']);
 	}
 
 	public static function provideModerator(): Folk
@@ -33,7 +33,7 @@ trait UserProviderTrait
 		/** @var FolkRepository $folkRepository */
 		$folkRepository = static::getContainer()->get(FolkRepository::class);
 
-		return $folkRepository->findOneBy(['roles' => Roles::ROLE_MODERATOR]);
+		return $folkRepository->findOneBy(['email' => 'moderator@mail.com']);
 	}
 
 	public static function provideRedactor(): Folk
@@ -41,7 +41,7 @@ trait UserProviderTrait
 		/** @var FolkRepository $folkRepository */
 		$folkRepository = static::getContainer()->get(FolkRepository::class);
 
-		return $folkRepository->findOneBy(['roles' => Roles::ROLE_REDACTOR]);
+		return $folkRepository->findOneBy(['email' => 'redactor@mail.com']);
 	}
 
 	public static function provideUser(): Folk
@@ -49,6 +49,6 @@ trait UserProviderTrait
 		/** @var FolkRepository $folkRepository */
 		$folkRepository = static::getContainer()->get(FolkRepository::class);
 
-		return $folkRepository->findOneBy(['roles' => Roles::ROLE_USER]);
+		return $folkRepository->findOneBy(['email' => 'user@mail.com']);
 	}
 }

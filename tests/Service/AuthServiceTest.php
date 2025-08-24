@@ -6,6 +6,7 @@ use App\Entity\Folk;
 use App\Repository\FolkRepository;
 use App\Service\AuthService;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +27,7 @@ class AuthServiceTest extends TestCase
 		);
 	}
 
+	#[Test]
     public function testRegister(): void
     {
 		// Arrange
