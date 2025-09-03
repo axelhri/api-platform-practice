@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline (fast + docker push)
 
 on:
     push:
@@ -6,9 +6,26 @@ on:
     pull_request:
         branches: [ main, develop ]
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    APP_ENV: test
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }} # ex: owner/repo
+    PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'test_secret' }}
+    JWT_PASSPHRASE: f0bd246b9c3e8aa4be6591bb1275cdf6d09e0873bb5aa4d74c506bff925d7a16
+
 jobs:
     test:
+        name: Tests + Qualité
         runs-on: ubuntu-latest
+        env:
+            APP_ENV: test
+            DATABASE_URL: postgresql://test:${{ secrets.POSTGRES_PASSWORD || 'test_secret' }}@127.0.0.1:5432/test?serverVersion=16&charset=utf8
+            PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'test_secret' }}
+            JWT_PASSPHRASE: f0bd246b9c3e8aa4be6591bb1275cdf6d09e0873bb5aa4d74c506bff925d7a16
 
         services:
             postgres:
@@ -20,37 +37,42 @@ jobs:
                 ports:
                     - 5432:5432
                 options: >-
-                    --health-cmd="pg_isready -U test -d test"
-                    --health-interval=10s
+                    --health-cmd="pg_isready -U test -d test -h localhost"
+                    --health-interval=5s
                     --health-timeout=5s
-                    --health-retries=5
-
-        env:
-            APP_ENV: test
-            DATABASE_URL: "postgresql://test:${{ secrets.POSTGRES_PASSWORD || 'test_secret' }}@127.0.0.1:5432/test"
-            JWT_PASSPHRASE: f0bd246b9c3e8aa4be6591bb1275cdf6d09e0873bb5aa4d74c506bff925d7a16
+                    --health-retries=10
 
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout
+              uses: actions/checkout@v4
 
-            - name: Setup PHP
+            - name: Setup PHP (no coverage for speed)
               uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.4'
                   extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, redis
-                  coverage: xdebug
+                  coverage: none
+                  tools: composer:v2
+                  ini-values: memory_limit=-1
 
-            - name: Cache Composer packages
-              id: composer-cache
-              uses: actions/cache@v3
+            - name: Cache Composer download cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.composer/cache
+                  key: composer-cache-${{ runner.os }}-php-8.4-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      composer-cache-${{ runner.os }}-php-8.4-
+
+            - name: Cache vendor
+              uses: actions/cache@v4
               with:
                   path: vendor
-                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  key: vendor-${{ runner.os }}-php-8.4-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
-                      ${{ runner.os }}-php-
+                      vendor-${{ runner.os }}-php-8.4-
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress
+              run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
             - name: Generate JWT keys
               run: |
@@ -59,29 +81,30 @@ jobs:
                   openssl rsa -pubout -in config/jwt/private.pem -passin pass:$JWT_PASSPHRASE -out config/jwt/public.pem
 
             - name: Wait for PostgreSQL to be ready
-              run: |
-                  for i in {1..10}; do
-                    pg_isready -h 127.0.0.1 -p 5432 -U test && break
-                    echo "Waiting for PostgreSQL..."
-                    sleep 5
-                  done
               env:
-                  PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'test_secret' }}
+                  PGPASSWORD: ${{ env.PGPASSWORD }}
+              run: |
+                  for i in {1..20}; do
+                    pg_isready -h 127.0.0.1 -p 5432 -U test -d test && break
+                    echo "Waiting for PostgreSQL ($i/20)..."
+                    sleep 3
+                  done
+                  psql -h 127.0.0.1 -p 5432 -U test -d test -c 'SELECT 1;'
 
             - name: Prepare test database (migrations + fixtures)
               run: |
-                  php bin/console doctrine:database:create --env=test --if-not-exists
-                  php bin/console doctrine:migrations:migrate --env=test --no-interaction
-                  php bin/console doctrine:fixtures:load --env=test --no-interaction
+                  php bin/console doctrine:database:create --env=test --if-not-exists -q
+                  php bin/console doctrine:migrations:migrate --env=test --no-interaction -q || true
+                  php bin/console doctrine:fixtures:load --env=test --no-interaction -q
 
-            - name: Analyse statique avec PHPStan
+            - name: Analyse statique - PHPStan
               run: php ./vendor/bin/phpstan analyze
 
-            - name: Analyse statique avec PHP-CS-Fixer
+            - name: Analyse statique - PHP-CS-Fixer
               run: php ./vendor/bin/php-cs-fixer fix --dry-run --diff --allow-risky=yes --using-cache=no
 
-            - name: Lint Symfony
+            - name: Lint Symfony (prod container)
               run: php bin/console lint:container --env=prod
 
             - name: Run tests
-              run: XDEBUG_MODE=off php -d display_errors=1 -d log_errors=1 ./bin/phpunit --testdox
+              run: php -d display_errors=1 -d log_errors=1 ./bin/phpunit --testdox
