@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\AuthController;
 use App\EntityListener\FolkListener;
 use App\Enum\AppGroups;
 use App\Enum\OaFormats;
@@ -31,6 +32,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 		new GetCollection(),
 		new Patch(security: "is_granted('" . FolkVoter::EDIT . "', object)"),
 		new Delete(security: "is_granted('" . FolkVoter::DELETE . "', object)"),
+		new Get(
+			uriTemplate: '/me',
+			controller: AuthController::class,
+			normalizationContext: [
+				'groups' => [AppGroups::USER_READ],
+				'enable_max_depth' => true,
+			],
+			security: "is_granted('IS_AUTHENTICATED_FULLY', object)",
+		)
 	],
 	normalizationContext: [
 		'groups' => [AppGroups::USER_READ],
